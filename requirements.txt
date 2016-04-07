@@ -24,3 +24,5 @@ oauth2client==2.0.1
 gevent
 gunicorn
 
+# requests
+requests
