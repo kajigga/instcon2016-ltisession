@@ -39,4 +39,4 @@ if __name__ == '__main__':
   dynamically detect the change on each startup. Reasonable default values of 
   hostname 0.0.0.0 and port 5000 are set as well.'''
 
-  app.run(host=os.getenv('IP','0.0.0.0'),port=os.getenv('PORT',5000))    
+  app.run(host=os.getenv('IP','0.0.0.0'),port=int(os.getenv('PORT',5000)))    
