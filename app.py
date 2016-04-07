@@ -3,8 +3,55 @@ This file creates your application.
 """
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
+
+from pylti.flask import lti
+from pylti.common import LTI_PROPERTY_LIST, LTI_ROLES
+
 app = Flask(__name__)
 app.debug = True
+
+# set the secret key.  keep this really secret:
+app.secret_key = 'a0lkanvoiuas9d8faskdjaksjnvalisdfJ:{}{OIUzR98J/3Yx r~xhh!JMn]lwx/,?rt'
+
+
+# LTI Consumers
+consumers = {
+    "key": {"abc123": "secretkey-for-abc123"}
+}
+
+# Configure flask app with PYLTI config, specifically the consumers
+app.config['PYLTI_CONFIG'] = {'consumers': consumers}
+
+# Canvas sends some custom LTI launch parameters. Add these to the list of
+# known parameters so that pylti will save them.
+LTI_PROPERTY_LIST.extend([
+    'custom_canvas_api_domain',
+    'custom_canvas_course_id',
+    'custom_canvas_enrollment_state',
+    'custom_canvas_user_id',
+    'custom_canvas_user_login_id',
+    'custom_project_id'
+    ])
+
+# Canvas uses full standard roles from the LTI spec. PYLTI does not include
+# them by default so we add these to the list of known roles
+
+# This is the Administrator role and all of the different variations
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Administrator' ] = [ 
+    'urn:lti:instrole:ims/lis/Administrator', 
+    'urn:lti:sysrole:ims/lis/SysAdmin',
+    'urn:lti:sysrole:ims/lis/None'
+]
+
+# This is the Instructor role
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Instructor' ] = [ 'urn:lti:instrole:ims/lis/Instructor', ]
+
+# This is the student role
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Student' ] = [ 
+    'urn:lti:instrole:ims/lis/Student', 
+    'urn:lti:instrole:ims/lis/Learner'
+]
+
 
 #app.config['SERVER_NAME'] = '<change this>'
 # Make sure app uses https everywhere. This will become important when there
@@ -29,7 +76,7 @@ def hello_world():
 @app.context_processor
 def inject_app_info():
   return {
-      'version':"0.0.1",
+      'version':"0.0.1-step2",
       'project_name':'LTI Starter'
       }
 
