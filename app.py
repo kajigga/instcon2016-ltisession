@@ -6,21 +6,24 @@ from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
 app.debug = True
 
-#app.config['SERVER_NAME'] = '<change this>'
-# Make sure app uses https everywhere. This will become important when there
-# are actually LTI endpoints and configuration used.
-#app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 @app.route('/')
 def index():
     # "index.html" is a file found in the "templates" folder. It is mostly regular
     # HTML with some special templating syntax mixed in. The templating
     # language is called Jinja.
-    return render_template('index.html')
+    return render_template('layout.html')
 
 @app.route('/hello_world')
 def hello_world():
     return 'Hello World!'
+
+@app.route('/lti/testlaunch', methods=['GET', 'POST'])
+def lti_test_launch():
+  # POST parameters
+  # print request.form.keys()
+  print request.args.keys()
+  return render_template('lti_test_launch.html', post=request.form, get=request.args)
 
 # I like to make certain values available on any rendered template without
 # explicitly naming them. While these values won't change very often, I would
@@ -29,7 +32,7 @@ def hello_world():
 @app.context_processor
 def inject_app_info():
   return {
-      'version':"0.0.1",
+      'version':"0.0.2-step2",
       'project_name':'LTI Starter'
       }
 
