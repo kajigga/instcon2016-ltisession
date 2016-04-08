@@ -5,6 +5,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
 app.debug = True
+app.secret_key = 'a-really-long-should-be-unique-random-string'
 
 #app.config['SERVER_NAME'] = '<change this>'
 # Make sure app uses https everywhere. This will become important when there
@@ -20,7 +21,9 @@ def index():
 
 @app.route('/hello_world')
 def hello_world():
-    return 'Hello World!'
+    name = 'World'
+    session['name'] = request.args.get('name')
+    return 'Hello {}!'.format(name)
 
 # I like to make certain values available on any rendered template without
 # explicitly naming them. While these values won't change very often, I would
@@ -29,7 +32,7 @@ def hello_world():
 @app.context_processor
 def inject_app_info():
   return {
-      'version':"0.0.1",
+      'version':"0.0.1-step1",
       'project_name':'LTI Starter'
       }
 
