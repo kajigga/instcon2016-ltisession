@@ -39,11 +39,24 @@
 
       <div class="starter-template">
         <h1>{{ page_title }}</h1>
-        <p class="lead">Use this document as a way to quickly start any new
-        project.<br> All you get is this text and a mostly barebones HTML
-        document.</p>
 
-        {% block main_content%}{% endblock %}
+        {% block main_content %}
+          <p class="lead">If you are seeing this text, then you haven't properly
+          extended the <em>main_content</em> block .<br> All you get is this text and a mostly barebones HTML
+          document.</p>
+<pre>
+<code>
+{% raw %}
+{% extends "layout.html" %}
+
+{% block main_content %}
+Anything here will be the content of the block.
+{% endblock %}
+
+{% endraw %}
+</code>
+</pre>
+        {% endblock %}
       </div>
 
     </div><!-- /.container -->
