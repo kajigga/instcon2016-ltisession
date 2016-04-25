@@ -34,22 +34,25 @@ LTI_PROPERTY_LIST.extend([
     ])
 
 # Canvas uses full standard roles from the LTI spec. PYLTI does not include
-# them by default so we add these to the list of known roles
+# them by default so we add these to the list of known roles.
+
+# NOTE: We can use my pylti package unless the main pylti maintainers accept my
+# pull request
 
 # This is the Administrator role and all of the different variations
-LTI_ROLES[ 'urn:lti:instrole:ims/lis/Administrator' ] = [ 
-    'urn:lti:instrole:ims/lis/Administrator', 
-    'urn:lti:sysrole:ims/lis/SysAdmin'
-]
+#LTI_ROLES[ 'urn:lti:instrole:ims/lis/Administrator' ] = [ 
+#    'urn:lti:instrole:ims/lis/Administrator', 
+#    'urn:lti:sysrole:ims/lis/SysAdmin'
+#]
 
 # This is the Instructor role
-LTI_ROLES[ 'urn:lti:instrole:ims/lis/Instructor' ] = [ 'urn:lti:instrole:ims/lis/Instructor', ]
+#LTI_ROLES[ 'urn:lti:instrole:ims/lis/Instructor' ] = [ 'urn:lti:instrole:ims/lis/Instructor', ]
 
 # This is the student role
-LTI_ROLES[ 'urn:lti:instrole:ims/lis/Student' ] = [ 
-    'urn:lti:instrole:ims/lis/Student', 
-    'urn:lti:instrole:ims/lis/Learner'
-]
+#LTI_ROLES[ 'urn:lti:instrole:ims/lis/Student' ] = [ 
+#    'urn:lti:instrole:ims/lis/Student', 
+#    'urn:lti:instrole:ims/lis/Learner'
+#]
 
 
 #app.config['SERVER_NAME'] = '<change this>'
@@ -67,6 +70,16 @@ def index():
 @app.route('/hello_world')
 def hello_world():
     return 'Hello World!'
+
+@app.route('/first_lti_launch')
+@lti(error=error, request='initial')
+def first_lti_launch():
+  return render_template('first_lti_launch.html')
+
+
+def error(*args, **kwargs):
+  # TODO Make a better Error Message screen
+  return '{}'.format(kwargs['exception'])
 
 # I like to make certain values available on any rendered template without
 # explicitly naming them. While these values won't change very often, I would

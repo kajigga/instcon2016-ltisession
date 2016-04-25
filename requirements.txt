@@ -6,7 +6,7 @@ flask
 #----
 # LTI stuff
 #----
-pylti
+git+https://github.com/kajigga/pylti.git
 
 
 
