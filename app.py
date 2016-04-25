@@ -76,7 +76,7 @@ def hello_world():
 @app.context_processor
 def inject_app_info():
   return {
-      'version':"0.0.1-step2",
+      'version':"0.0.1-step3",
       'project_name':'LTI Starter'
       }
 
