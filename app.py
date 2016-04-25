@@ -39,8 +39,7 @@ LTI_PROPERTY_LIST.extend([
 # This is the Administrator role and all of the different variations
 LTI_ROLES[ 'urn:lti:instrole:ims/lis/Administrator' ] = [ 
     'urn:lti:instrole:ims/lis/Administrator', 
-    'urn:lti:sysrole:ims/lis/SysAdmin',
-    'urn:lti:sysrole:ims/lis/None'
+    'urn:lti:sysrole:ims/lis/SysAdmin'
 ]
 
 # This is the Instructor role
