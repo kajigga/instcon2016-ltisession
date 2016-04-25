@@ -2,8 +2,7 @@
 
 {% block main_content %}
   {% if session['name'] %}
-  <p>Hello, {{ session['name'] }}, how are you?</p>
-  {% else %}
-  <p>Hello!  How are you?</p>
+  <p>Hello, {{ session['name'] }}!</p>
   {% endif %}
+  {{ session }}
 {% endblock %}

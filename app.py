@@ -16,8 +16,12 @@ app.secret_key = 'a0lkanvoiuas9d8faskdjaksjnvalisdfJ:{}{OIUzR98J/3Yx r~xhh!JMn]l
 
 # LTI Consumers
 consumers = {
-    "key": {"abc123": "secretkey-for-abc123"}
+    "abc123": {"secret": "secretkey-for-abc123"}
 }
+
+#SERVER_NAME = 'inst-ic-proj.herokuapp.com'
+#SERVER_NAME = None
+#app.config['SERVER_NAME'] = SERVER_NAME
 
 # Configure flask app with PYLTI config, specifically the consumers
 app.config['PYLTI_CONFIG'] = {'consumers': consumers}
@@ -29,9 +33,8 @@ LTI_PROPERTY_LIST.extend([
     'custom_canvas_course_id',
     'custom_canvas_enrollment_state',
     'custom_canvas_user_id',
-    'custom_canvas_user_login_id',
-    'custom_project_id'
-    ])
+    'custom_canvas_user_login_id'
+])
 
 # Canvas uses full standard roles from the LTI spec. PYLTI does not include
 # them by default so we add these to the list of known roles.
@@ -55,7 +58,7 @@ LTI_PROPERTY_LIST.extend([
 #]
 
 
-#app.config['SERVER_NAME'] = '<change this>'
+#app.config['SERVER_NAME'] = 'localhost'
 # Make sure app uses https everywhere. This will become important when there
 # are actually LTI endpoints and configuration used.
 #app.config['PREFERRED_URL_SCHEME'] = 'https'
@@ -71,15 +74,22 @@ def index():
 def hello_world():
     return 'Hello World!'
 
-@app.route('/first_lti_launch')
-@lti(error=error, request='initial')
-def first_lti_launch():
-  return render_template('first_lti_launch.html')
-
-
 def error(*args, **kwargs):
   # TODO Make a better Error Message screen
   return '{}'.format(kwargs['exception'])
+
+@app.route('/lti/launch', methods=['POST'])
+@lti(error=error, request='initial')
+def first_lti_launch(lti, *args, **kwargs):
+  # return render_template('first_lti_launch.html')
+  return redirect('/lti/profile')
+
+@app.route('/lti/profile', methods=['GET'])
+@lti(error=error, request='session')
+def lti_profile(lti, *args, **kwargs):
+  return render_template('lti_profile.html')
+
+
 
 # I like to make certain values available on any rendered template without
 # explicitly naming them. While these values won't change very often, I would
