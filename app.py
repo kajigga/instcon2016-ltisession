@@ -2,7 +2,7 @@
 This file creates your application.
 """
 import os
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, make_response
 
 from pylti.flask import lti
 from pylti.common import LTI_PROPERTY_LIST, LTI_ROLES
@@ -20,7 +20,7 @@ consumers = {
 }
 
 #SERVER_NAME = 'inst-ic-proj.herokuapp.com'
-#SERVER_NAME = None
+SERVER_NAME = '0.0.0.0:5000'
 #app.config['SERVER_NAME'] = SERVER_NAME
 
 # Configure flask app with PYLTI config, specifically the consumers
@@ -89,7 +89,45 @@ def first_lti_launch(lti, *args, **kwargs):
 def lti_profile(lti, *args, **kwargs):
   return render_template('lti_profile.html')
 
+tools = [{ 
+  'domain' : SERVER_NAME,
+  'title' : 'Step 3 Config',
+  'description' : 'This is the step 3 config xml'
+},
+{ 
+  'domain' : SERVER_NAME,
+  'title' : 'Step 3.1 Config',
+  'description' : 'This is the step 3.1 config xml',
+  'nav' : [
+    {
+      'type':'course_navigation',
+      'enabled': True,
+      'default':'enabled',
+      # 'url':'', Is there a different launch URL for this navigation?
+      # 'visibility': '', # 'public', 'members', 'admins'
+      'text': 'course navigation text',
+      'labels': [
+        { 'locale': 'es', 'label': 'Utilidad LTI'},
+        { 'locale': 'en', 'label': 'LTI Tool'},
+      ]
+    },
+    { 
+      'type':'account_navigation',
+      'enabled': True,
+      'text': 'Acct. Link Text',
+      # 'url':'', Is there a different launch URL for this navigation?
+    }
+  ]
+}
+]
+@app.route('/lti/config/<tool_id>')
+def lti_config(tool_id):
+  tool_id = int(tool_id)
+  config_xml = render_template('xml/config.xml', tool=tools[tool_id])
+  response = make_response(config_xml)
+  response.headers["Content-Type"] = "application/xml"    
 
+  return response
 
 # I like to make certain values available on any rendered template without
 # explicitly naming them. While these values won't change very often, I would
