@@ -33,30 +33,14 @@ LTI_PROPERTY_LIST.extend([
     'custom_canvas_course_id',
     'custom_canvas_enrollment_state',
     'custom_canvas_user_id',
-    'custom_canvas_user_login_id'
+    'custom_canvas_user_login_id',
+    'ext_content_return_types',
+    'ext_outcome_data_values_accepted',
+    'ext_outcome_result_total_score_accepted',
+    'ext_content_intended_use',
+    'ext_content_return_url',
+    'ext_content_file_extensions'
 ])
-
-# Canvas uses full standard roles from the LTI spec. PYLTI does not include
-# them by default so we add these to the list of known roles.
-
-# NOTE: We can use my pylti package unless the main pylti maintainers accept my
-# pull request
-
-# This is the Administrator role and all of the different variations
-#LTI_ROLES[ 'urn:lti:instrole:ims/lis/Administrator' ] = [ 
-#    'urn:lti:instrole:ims/lis/Administrator', 
-#    'urn:lti:sysrole:ims/lis/SysAdmin'
-#]
-
-# This is the Instructor role
-#LTI_ROLES[ 'urn:lti:instrole:ims/lis/Instructor' ] = [ 'urn:lti:instrole:ims/lis/Instructor', ]
-
-# This is the student role
-#LTI_ROLES[ 'urn:lti:instrole:ims/lis/Student' ] = [ 
-#    'urn:lti:instrole:ims/lis/Student', 
-#    'urn:lti:instrole:ims/lis/Learner'
-#]
-
 
 #app.config['SERVER_NAME'] = 'localhost'
 # Make sure app uses https everywhere. This will become important when there
@@ -78,11 +62,19 @@ def error(*args, **kwargs):
   # TODO Make a better Error Message screen
   return '{}'.format(kwargs['exception'])
 
-@app.route('/lti/launch', methods=['POST'])
+@app.route('/lti/launch/<tool_id>', methods=['POST'])
 @lti(error=error, request='initial')
-def first_lti_launch(lti, *args, **kwargs):
-  # return render_template('first_lti_launch.html')
-  return redirect('/lti/profile')
+def first_lti_launch(lti, tool_id=None, *args, **kwargs):
+  if tool_id == '0':
+    return redirect('/lti/mapit')
+  else:
+    return render_template('lti_profile.html')
+
+G_API_KEY = 'AIzaSyDS7-sUBVXPy5XIjWJFsXzLf6fDEZtjFOw'
+@app.route('/lti/mapit')
+@lti(error=error, request='session')
+def mapit_launch(lti):
+  return render_template('mapit_launch.html',G_API_KEY=G_API_KEY)
 
 @app.route('/lti/profile', methods=['GET'])
 @lti(error=error, request='session')
@@ -91,31 +83,18 @@ def lti_profile(lti, *args, **kwargs):
 
 tools = [{ 
   'domain' : SERVER_NAME,
-  'title' : 'Step 3 Config',
-  'description' : 'This is the step 3 config xml'
-},
-{ 
-  'domain' : SERVER_NAME,
-  'title' : 'Step 3.1 Config',
-  'description' : 'This is the step 3.1 config xml',
+  'title' : 'Step 4-Module',
+  'description' : '''This is the step 4 LTI Tool, with differentiated
+  functionality for students and teachers, course navigation, and module item
+  navigation.''',
+  'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 0),
   'nav' : [
     {
       'type':'course_navigation',
       'enabled': True,
       'default':'enabled',
-      # 'url':'', Is there a different launch URL for this navigation?
       # 'visibility': '', # 'public', 'members', 'admins'
-      'text': 'course navigation text',
-      'labels': [
-        { 'locale': 'es', 'label': 'Utilidad LTI'},
-        { 'locale': 'en', 'label': 'LTI Tool'},
-      ]
-    },
-    { 
-      'type':'account_navigation',
-      'enabled': True,
-      'text': 'Acct. Link Text',
-      # 'url':'', Is there a different launch URL for this navigation?
+      'text': 'S4: Mapper',
     }
   ]
 }

@@ -1,0 +1,192 @@
+{% extends "layout.html" %}
+
+{% block main_content %}
+<div class='row'>
+  <div class='col-md-6'>
+    {% if 'Learner' in session['ext_roles'] %}
+      <p>You are a student, this page should load a map that was created by the
+      instructor before the course was published.</p>
+    {% endif %}
+
+    {% if 'Instructor' in session['ext_roles'] %}
+    <p>You are an instructor.</p>
+
+    <form id='instructor_controls'>
+      <div class='form-group'>
+        <label for='recenterLocation'>Search Location</label>
+        <input type='textbox' class='form-control' id='newLocation'
+        placeholder='e.g. "Dallas, Texas"'>
+      </div>
+      <!--
+      <div class='form-group'>
+        <label for='recenterLocation'>Start Location</label>
+        <input type='textbox' class='form-control' id='startLocation'
+        placeholder='e.g. "Dallas, Texas"'>
+      </div>
+      <div class='form-group'>
+        <label for='recenterLocation'>End Location</label>
+        <input type='textbox' class='form-control' id='endLocation'
+        placeholder='e.g. "Dallas, Texas"'>
+      </div>
+      -->
+    </form>
+    {% endif %}
+    <div id='map'></div>
+    
+  </div>
+  
+  <div class='col-md-6'>
+    <div id='total'></div>
+    <div id='right-panel'>
+    
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  #map {
+    width: 100%%;
+    height: 500px;
+  }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ G_API_KEY }}"></script>
+
+<script>
+var g_api_key='{{ G_API_KEY }}';
+var firebase = new Firebase('https://burning-fire-7264.firebaseio.com/'); //#-KGMjngqOsfdYmQVAuOQ|84de6e0176b2809975487d2c428c4965');
+var marker_db = firebase.child('markers');
+var map;
+var gc = new google.maps.Geocoder();
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 1,
+    center: {lat: 39.57605638518604, lng: -105.9521484375},  // Keystone, Colorado
+    zoomControl: false,
+    mapTypeControl: false,
+    scaleControl: false,
+    streetViewControl: false,
+    rotateControl: false,
+    fullscreenControl: false
+  });
+
+  var directionsService = new google.maps.DirectionsService;
+  var directionsDisplay = new google.maps.DirectionsRenderer({
+    draggable: true,
+    map: map,
+    panel: document.getElementById('right-panel')
+  });
+
+  directionsDisplay.addListener('directions_changed', function() {
+    computeTotalDistance(directionsDisplay.getDirections());
+  });
+
+  displayRoute('Denver, CO', 'Keystone, CO', directionsService,
+      directionsDisplay);
+
+  map.addListener('click', function(e) {
+    var info = {lat: e.latLng.lat(), lng: e.latLng.lng(), label: '', description:''};
+    marker_db.push(info);
+
+    var latLng = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+    setupMarker(latLng, info)
+
+  });
+}
+
+marker_db.on("child_added", function(snapshot, prevChildKey) {
+  // Get latitude and longitude from Firebase.
+  var newPosition = snapshot.val();
+
+  // Create a google.maps.LatLng object for the position of the marker.
+  // A LatLng object literal (as above) could be used, but the heatmap
+  // in the next step requires a google.maps.LatLng object.
+  var latLng = new google.maps.LatLng(newPosition.lat, newPosition.lng);
+  setupMarker(latLng, newPosition);
+});
+
+function setupMarker(latLng, info){
+
+  var infowindow = new google.maps.InfoWindow({ content: info.description });
+  // Place a marker at that location.
+  var marker = new google.maps.Marker({
+    position: latLng,
+    map: map,
+    title:'',
+  });
+
+  // Add a click handler to the marker so it shows the info window when...clicked
+  marker.addListener('click', function(){
+    infowindow.open(map, marker); 
+  });
+}
+
+function displayRoute(origin, destination, service, display) {
+  service.route({
+    origin: origin,
+    destination: destination,
+    waypoints: [{location: 'Boulder, CO'}, {location: 'Black Hawk, CO'}],
+    travelMode: google.maps.TravelMode.DRIVING,
+    avoidTolls: true
+  }, function(response, status) {
+    if (status === google.maps.DirectionsStatus.OK) {
+      display.setDirections(response);
+    } else {
+      alert('Could not display directions due to: ' + status);
+    }
+  });
+}
+
+function computeTotalDistance(result) {
+  var total = 0;
+  var myroute = result.routes[0];
+  for (var i = 0; i < myroute.legs.length; i++) {
+    total += myroute.legs[i].distance.value;
+  }
+  total = total / 1000;
+  document.getElementById('total').innerHTML = total + ' km';
+}
+
+function searchAndRecenter(search){
+  console.log('search', search);
+  gc.geocode(search, function(results, status){
+    if (status == google.maps.GeocoderStatus.OK) {
+      map.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+      });
+    } else {
+      alert("Geocode was not successful for the following reason: " + status);
+    }
+  });
+
+}
+
+
+google.maps.event.addDomListener(window, "load", initMap);
+
+$(document).ready(function(){
+  $('#instructor_controls').submit(function(e){
+    var search = {
+     address: $('#newLocation').val(),
+    };
+    searchAndRecenter( search );
+    event.preventDefault(); 
+  });
+});
+
+</script>
+
+{% endblock %}
