@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, m
 
 from pylti.flask import lti
 from pylti.common import LTI_PROPERTY_LIST, LTI_ROLES
+import urllib
 
 app = Flask(__name__)
 app.debug = True
@@ -96,6 +97,138 @@ def yt_watch_for_points_submit(lti, *args, **kwargs):
   print('response', response)
   return jsonify(status=response)
 
+@app.route('/lti/baconipsum/fetch')
+@lti(error=error, request='session')
+def baconIpsumFetch(lti,*args,**kwargs):
+    num_para = int(request.args.get('num_para',5))
+    with_bacon = request.args.get('with_bacon','no').lower()
+    show = request.args.get('show','none').lower()
+    resp = {
+      'version': '1.0',
+      'type': 'rich',
+      'width': '240',
+      'height': '160',
+      'provider_name': 'BaconIpsum',
+      'html':'<p>lkjlkjlkj</p>'
+    }
+    
+
+    #print 'with_bacon', with_bacon
+    if with_bacon == 'yes':
+      # Now get the bacon ipsum
+      bacon_url = "http://baconipsum.com/api/?type=meat-and-filler&paras=%d&start-with-lorem=0" % num_para 
+
+      try:
+        paragraphs = requests.get(bacon_url).json()
+        # paragraphs = json_decode('%s' % bacon_response)
+      except Exception,err:
+        print 'err',err
+        bacon_response = "Hello, this is an error."
+        bacon_response = ''.join(bacon_response.splitlines())
+
+        paragraphs = ['',]
+      resp['html'] = "<p>%s</p>" % "</p><p>".join(paragraphs)
+    elif show in ('arresteddevelopment','doctorwho','dexter','futurama','holygrail','simpsons','starwars'):
+
+      fillerama_url = "http://api.chrisvalleskey.com/fillerama/get.php?count=100&format=json&show=%s" % show
+      response = requests.get(fillerama_url).json()
+      paragraphs = [x['quote'] for x in response['db']]
+      resp['html'] = "<p>%s</p>" % "</p><p>".join(paragraphs)
+    else:
+      # No bacon wanted, get regular Lorem Ipsum
+      options = ['short','headers','decorate','link','ul','ul','dl','bq']
+      lorem_url = "http://loripsum.net/api/%d/%s" % (num_para,'/'.join(options))
+      paragraphs = requests.get(lorem_url).text
+      paragraphs = paragraphs.replace('loripsum.net',settings.LTI_BASE_DOMAIN.split('/')[-1])
+      resp['html'] = paragraphs
+
+    return render_template('baconIpsumFetch.html',dict(paragraphs=paragraphs))
+    #if request.args.get('html','no')=='yes':
+    #  return render_template('baconIpsumFetch.html',dict(paragraphs=paragraphs))
+    #else:
+    #  return HttpResponse(json.dumps(resp), content_type="application/json")
+
+@app.route('/lti/baconipsum/choose', methods=['GET', 'POST'])
+@lti(error=error, request='session')
+def baconIpsumChoose(request):
+  if request.method == 'GET':
+    # Prompt the user to select the size of the bacon 
+    return render_template('baconIpsumChoose.html')
+
+  elif request.method=='POST':
+    # Then do an api request to http://baconipsum.com/api/
+    # to get some bacon.  Write the text to a file and return to the LTI "on done" url"
+    # TODO This needs to be fixed to  be
+    # an oEmbed link.  i.e. http://oembed.com/
+    #
+    # https://canvas.instructure.com/doc/api/editor_button_tools.html
+
+    # For some reason, we can't use https here... see
+    # canvas-lms/app/controllers/external_content_controller.rb
+    with_bacon = request.form.get('with_bacon','no').lower()
+    red_args = {'oembed' :{
+        'url':     url_for('baconIpsumFetch',args=['lkjlkjlk'])), 
+        'endpoint':'',
+        'width':'400',
+        'height':'400',
+        'embed_type':'oembed',
+        },
+    'link': { # works
+        'url':     url_for('baconIpsumFetch',args=['lkjlkjlk'])), 
+        'title':'this is the title',
+        'text':'link text',
+        'embed_type':'link'
+        },
+    'img': { # works
+        # Other options: 
+        # - http://placehold.it/
+        # - http://www.webresourcesdepot.com/8-free-placeholder-image-services-for-instant-dummy-images/
+        'url':     'https://placekitten.com/g/%d/%d',
+        'title':'this is the title',
+        'alt': 'random kitten',
+        'embed_type':'image',
+        'width':300,
+        'height':250
+      },
+    'iframe': { # works, the iframe is created but something on the
+                # Canvas side is borking up the iframe code
+        'url':     'https://icanhascheezburger.files.wordpress.com',
+        'title':'this is the title',
+        'alt': 'ceiling cat',
+        'embed_type':'iframe',
+        'width':600,
+        'height':250
+        }
+    }
+  
+    success_url = session.get('launch_presentation_return_url','')
+
+    #redirect_url = success_url % urllib.urlencode(red_args['oembed'])
+    wanted_type = request.form.get('wanted_type','oembed')
+    if wanted_type in ('img','link','iframe','oembed'):
+      #redirect_url = success_url % urllib.urlencode(red_args['img'])
+      print 'wanted ', wanted_type
+      if wanted_type == 'img':
+        height = int(request.args.get('height',100))
+        width  = int(request.args.get('width',100))
+        red_args['img']['url'] = red_args['img']['url'] % (height,width)
+        red_args['img']['height'] = height
+        red_args['img']['width']  = width
+      elif wanted_type == 'iframe':
+        pass
+      elif wanted_type == 'link':
+        pass
+      elif wanted_type == 'oembed':
+        show = request.form.get('show','none')
+        url_for('baconIpsumFetch',args=['lkjlkjlk']) 
+        red_args['oembed']['endpoint'] = url_for('baconIpsumFetch',args=['lkjlkjlk'])
+        red_args['oembed']['url'] = red_args['oembed']['endpoint'] #.replace('https','http')
+
+      redirect_url = success_url +"?"+ urllib.urlencode(red_args[wanted_type])
+    return redirect(redirect_url)
+
+
+
 
 @app.route('/lti/profile', methods=['GET'])
 @lti(error=error, request='session')
@@ -119,15 +252,25 @@ tools = [{
     }
   ]
   },{ 
-  'domain' : SERVER_NAME,
-  'title' : 'Step 5-Watch Youtube - Get Grade',
-  'description' : '''This is the step 5 LTI Tool, with differentiated
-  functionality for students and teachers. Teach will add an assignment as
-  external tool, and select a youtube video. Students watch the video and get
-  points when they finish the video.''',
+    'domain' : SERVER_NAME,
+    'title' : 'Step 5-Watch Youtube - Get Grade',
+    'description' : '''This is the step 5 LTI Tool, with differentiated
+    functionality for students and teachers. Teach will add an assignment as
+    external tool, and select a youtube video. Students watch the video and get
+    points when they finish the video.''',
 
-  'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 1),
-  }]
+    'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 1),
+  },
+  { 
+    'domain' : SERVER_NAME,
+    'title' : 'Step 6-Lorem Ipsum',
+    'description' : '''This is the step 6 LTI Tool, which enables a richtext
+    editor button that, when clicked, allows the user to insert a Lorem Ipsum
+    text snippet.''',
+
+    'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 2),
+  }
+]
 
 @app.route('/lti/config/<tool_id>')
 def lti_config(tool_id):
@@ -145,7 +288,7 @@ def lti_config(tool_id):
 @app.context_processor
 def inject_app_info():
   return {
-      'version':"0.0.1-step5",
+      'version':"0.0.1-step6",
       'project_name':'LTI Starter'
       }
 

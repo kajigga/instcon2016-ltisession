@@ -1,0 +1,61 @@
+{% extends 'ltiapp_layout.html'%}
+{% block page_title %}Choose your Bacon{% endblock %}
+
+{% block main_content %}
+<div class='small-12 columns'>
+    <p>What do you want?</p>
+    <button type='button' id='kitten_btn'>Kitten Image</button>
+    <button type='button' id='lorem_btn'>Lorem Ipsum</button>
+    <form action='{% url "baconipsum:bacon_choose" %}' method='POST'>
+        {% csrf_token %}
+    </form>
+    <form action='{% url "baconipsum:bacon_choose" %}' method='POST'>
+      {% csrf_token %}
+      <input type='hidden' name='wanted_type' id='wanted_type' value='img'/> 
+      <fieldset id='kitten_fields' style='display:none'>
+        <legend>Kitten Picture</legend>
+        <p>Height: <input type='textbox' name='height'/></p>
+        <p>Width: <input type='textbox' name='width'/></p>
+      </fieldset>
+      <fieldset id='lorem_fields' style='display:none'>
+        <legend>Lorem Ipsum</legend>
+        <p> Lorem with Bacon? &nbsp;<input type='checkbox' value='yes' name='with_bacon'/> </p>
+        <p>Number of Paragraphs: 
+        <select name='num_para'>
+          <option value='5'>5</option>
+          <option value='4'>4</option>   
+          <option value='3'>3</option>    
+          <option value='2'>2</option>    
+          <option value='1'>1</option>    
+
+        </select>      
+        </p>
+      </fieldset>
+      <input type='submit' name='submit' value='submit' id='wanted_submit_btn' style='display:none'/>
+    </form>      
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <!-- <script src='{{ STATIC_URL }}js/jquery.min.js' type='text/javascript'></script> -->
+    <script type='text/javascript'>
+      $(document).ready(function(){ 
+          $('button').click(function(){
+            $('#wanted_submit_btn').show();
+          });
+
+          $('#kitten_btn').click(function(){
+            $('#wanted_type').val('img');
+            $('#kitten_fields').show();
+            $('#lorem_fields').hide();
+          });
+          $('#lorem_btn').click(function(){
+            $('#wanted_type').val('oembed');
+            $('#lorem_fields').show();
+            $('#kitten_fields').hide();
+          });
+      });
+    </script>
+{% endblock %}
