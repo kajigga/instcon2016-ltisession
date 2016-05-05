@@ -242,7 +242,7 @@ tools = [{
   'description' : '''This is the step 4 LTI Tool, with differentiated
   functionality for students and teachers, course navigation, and module item
   navigation.''',
-  'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 0),
+  'url':'https://{}/lti/launch/{}'.format(SERVER_NAME, 0),
   'nav' : [
     {
       'type':'course_navigation',
@@ -260,7 +260,7 @@ tools = [{
     external tool, and select a youtube video. Students watch the video and get
     points when they finish the video.''',
 
-    'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 1),
+    'url':'https://{}/lti/launch/{}'.format(SERVER_NAME, 1),
   },
   { 
     'domain' : SERVER_NAME,
@@ -269,7 +269,7 @@ tools = [{
     editor button that, when clicked, allows the user to insert a Lorem Ipsum
     text snippet.''',
 
-    'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 2),
+    'url':'https://{}/lti/launch/{}'.format(SERVER_NAME, 2),
     'editor_button':{
         'icon_url':'https://dl.dropboxusercontent.com/u/1647772/lorem.png',
         "selection_width":500,
