@@ -28,5 +28,13 @@
         {% endif %}
       </lticm:options>
       {% endfor %}
+      {% if tool.editor_button %}
+      <lticm:options name="editor_button">
+        <lticm:property name="enabled">true</lticm:property>
+        <lticm:property name="icon_url">{{ tool.editor_button.icon_url }}</lticm:property>
+        <lticm:property name="selection_width">{{ tool.editor_button.selection_width }}</lticm:property>
+        <lticm:property name="selection_height">{{ tool.editor_button.selection_height }}</lticm:property>
+      </lticm:options>
+      {% endif %}
     </blti:extensions>
 </cartridge_basiclti_link>

@@ -167,14 +167,14 @@ def baconIpsumChoose(request):
     # canvas-lms/app/controllers/external_content_controller.rb
     with_bacon = request.form.get('with_bacon','no').lower()
     red_args = {'oembed' :{
-        'url':     url_for('baconIpsumFetch',args=['lkjlkjlk'])), 
+        'url':     url_for('baconIpsumFetch',args=['lkjlkjlk']), 
         'endpoint':'',
         'width':'400',
         'height':'400',
         'embed_type':'oembed',
         },
     'link': { # works
-        'url':     url_for('baconIpsumFetch',args=['lkjlkjlk'])), 
+        'url':     url_for('baconIpsumFetch',args=['lkjlkjlk']), 
         'title':'this is the title',
         'text':'link text',
         'embed_type':'link'
@@ -269,6 +269,11 @@ tools = [{
     text snippet.''',
 
     'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 2),
+    'editor_button':{
+        'icon_url':'https://example.com/image_selector.png',
+        "selection_width":500,
+        "selection_height":300
+        }
   }
 ]
 
