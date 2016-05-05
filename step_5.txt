@@ -1,0 +1,8 @@
+
+In step 5 we will make an LTI app that will do:
+
+* Link selection
+* Resource selection
+* Rich Text Button, Lorem Ipsum
+* Rich Text button, iFrame Inserter
+* Student Views Page, javascript

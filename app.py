@@ -2,7 +2,7 @@
 This file creates your application.
 """
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, make_response
+from flask import Flask, render_template, request, redirect, url_for, session, make_response, jsonify
 
 from pylti.flask import lti
 from pylti.common import LTI_PROPERTY_LIST, LTI_ROLES
@@ -67,6 +67,8 @@ def error(*args, **kwargs):
 def first_lti_launch(lti, tool_id=None, *args, **kwargs):
   if tool_id == '0':
     return redirect('/lti/mapit')
+  elif tool_id == '1':
+    return redirect('/lti/yt_watch_for_points')
   else:
     return render_template('lti_profile.html')
 
@@ -75,6 +77,25 @@ G_API_KEY = 'AIzaSyDS7-sUBVXPy5XIjWJFsXzLf6fDEZtjFOw'
 @lti(error=error, request='session')
 def mapit_launch(lti):
   return render_template('mapit_launch.html',G_API_KEY=G_API_KEY)
+
+@app.route('/lti/yt_watch_for_points')
+@lti(error=error, request='session')
+#@lti(error=error, request='session', role='learner')
+#@lti(error=error, request='session', role='instructor')
+def yt_watch_for_points(lti, *args, **kwargs):
+  video_id = 'M7lc1UVf-VE'
+  return render_template('yt_watch_for_points.html', video_id=video_id)
+
+@app.route('/lti/yt_watch_for_points/finished', methods=['POST'])
+@lti(error=error, request='session')
+#@lti(error=error, request='session', role='learner')
+#@lti(error=error, request='session', role='instructor')
+def yt_watch_for_points_submit(lti, *args, **kwargs):
+  status = 'submitted'
+  response = lti.post_grade(request.form.get('score',0))
+  print('response', response)
+  return jsonify(status=response)
+
 
 @app.route('/lti/profile', methods=['GET'])
 @lti(error=error, request='session')
@@ -97,8 +118,17 @@ tools = [{
       'text': 'S4: Mapper',
     }
   ]
-}
-]
+  },{ 
+  'domain' : SERVER_NAME,
+  'title' : 'Step 5-Watch Youtube - Get Grade',
+  'description' : '''This is the step 5 LTI Tool, with differentiated
+  functionality for students and teachers. Teach will add an assignment as
+  external tool, and select a youtube video. Students watch the video and get
+  points when they finish the video.''',
+
+  'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 1),
+  }]
+
 @app.route('/lti/config/<tool_id>')
 def lti_config(tool_id):
   tool_id = int(tool_id)
@@ -115,7 +145,7 @@ def lti_config(tool_id):
 @app.context_processor
 def inject_app_info():
   return {
-      'version':"0.0.1-step3",
+      'version':"0.0.1-step5",
       'project_name':'LTI Starter'
       }
 

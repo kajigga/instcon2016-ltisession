@@ -152,12 +152,13 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ G_API_KEY }}"></script>
+<script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
 <script>
 var LTI_ENV = { 
   custom_canvas_user_id: '{{ session.custom_canvas_user_id }}', 
   context_id: '{{session.context_id}}' ,
+  resource_link_id: '{{session.resource_link_id}}',
   is_instructor: false
 };
 </script>
@@ -169,11 +170,6 @@ var LTI_ENV = {
 {% endif %}
 
 <script>
-var LTI_ENV = { 
-  custom_canvas_user_id: '{{ session.custom_canvas_user_id }}', 
-  context_id: '{{session.context_id}}' ,
-  is_instructor: false
-};
 $(document).ready(function(){
   initMap();
   {% if 'Instructor' in session['ext_roles'] %}
