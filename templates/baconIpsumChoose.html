@@ -6,20 +6,36 @@
     <p>What do you want?</p>
     <button class='btn btn-default' type='button' id='kitten_btn'>Kitten Image</button>
     <button class='btn btn-default' type='button' id='lorem_btn'>Lorem Ipsum</button>
-    <form action='{{ url_for("baconIpsumChoose", _scheme='https', _external=True) }}' method='POST'>
-        
-    </form>
-    <form action='{{ url_for("baconIpsumChoose", _scheme='https', _external=True) }}' method='POST'>
-  
+    <form class='form-horizontal' action='{{ url_for("baconIpsumChoose", _scheme='https', _external=True) }}' method='POST'>
       <input type='hidden' name='wanted_type' id='wanted_type' value='img'/> 
+  
+
       <fieldset id='kitten_fields' style='display:none'>
         <legend>Kitten Picture</legend>
-        <p>Height: <input type='textbox' name='height'/></p>
-        <p>Width: <input type='textbox' name='width'/></p>
+        <div class="form-group">
+          <label for="height" class="col-sm-2 control-label">Height</label>
+          <div class="col-sm-10">
+            <input type="height" class="form-control" id="height" placeholder="height">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="width" class="col-sm-2 control-label">Width</label>
+          <div class="col-sm-10">
+            <input type="width" class="form-control" id="width" placeholder="width">
+          </div>
+        </div>
       </fieldset>
+
       <fieldset id='lorem_fields' style='display:none'>
         <legend>Lorem Ipsum</legend>
         <p> Lorem with Bacon? &nbsp;<input type='checkbox' value='yes' name='with_bacon'/> </p>
+        <div class="form-group">
+          <label for="with_bacon" class="col-sm-2 control-label">with bacon?</label>
+          <div class="col-sm-10">
+            <input type="checkbox" class="form-control" id="width" placeholder="width">
+          </div>
+        </div>
+
         <p>Number of Paragraphs: 
         <select name='num_para'>
           <option value='5'>5</option>
@@ -31,7 +47,7 @@
         </select>      
         </p>
       </fieldset>
-      <input type='submit' name='submit' value='submit' id='wanted_submit_btn' style='display:none'/>
+      <input class='btn btn-primary' type='submit' name='submit' value='submit' id='wanted_submit_btn' style='display:none'/>
     </form>      
 
 </div>
