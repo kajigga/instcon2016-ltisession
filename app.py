@@ -159,8 +159,8 @@ def baconIpsumFetch(*args,**kwargs):
       return jsonify(resp)
 
 @app.route('/lti/baconipsum/choose', methods=['GET', 'POST'])
-@lti(error=error, request='session')
-def baconIpsumChoose(lti, *args, **kwargs):
+#@lti(error=error, request='session')
+def baconIpsumChoose(*args, **kwargs):
   if request.method == 'GET':
     # Prompt the user to select the size of the bacon 
     return render_template('baconIpsumChoose.html')

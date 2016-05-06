@@ -6,38 +6,36 @@
     <p>What do you want?</p>
     <button class='btn btn-default' type='button' id='kitten_btn'>Kitten Image</button>
     <button class='btn btn-default' type='button' id='lorem_btn'>Lorem Ipsum</button>
-    <form class='form-horizontal' action='{{ url_for("baconIpsumChoose", _scheme='https', _external=True) }}' method='POST'>
+    <form class='form-vertical' action='{{ url_for("baconIpsumChoose" ) }}' method='POST'>
       <input type='hidden' name='wanted_type' id='wanted_type' value='img'/> 
   
 
-      <fieldset id='kitten_fields' style='display:none'>
-        <legend>Kitten Picture</legend>
+      <div id='kitten_fields' style='display:none'>
         <div class="form-group">
-          <label for="height" class="col-sm-2 control-label">Height</label>
-          <div class="col-sm-10">
+          <label for="height" class="control-label">Height</label>
+          <div class="">
             <input type="height" class="form-control" id="height" placeholder="height">
           </div>
         </div>
         <div class="form-group">
-          <label for="width" class="col-sm-2 control-label">Width</label>
-          <div class="col-sm-10">
+          <label for="width" class="control-label">Width</label>
+          <div class="">
             <input type="width" class="form-control" id="width" placeholder="width">
           </div>
         </div>
-      </fieldset>
+      </div>
 
-      <fieldset id='lorem_fields' style='display:none'>
-        <legend>Lorem Ipsum</legend>
+      <div id='lorem_fields' style='display:none'>
         <div class="form-group">
-          <label for="with_bacon" class="col-sm-2 control-label">with bacon?</label>
-          <div class="col-sm-10">
+          <label for="with_bacon" class="control-label">with bacon?</label>
+          <div class="">
             <input type="checkbox" class="form-control" id="width" placeholder="width">
           </div>
         </div>
 
         <div class='form-group'>
-          <label for="num_para" class="col-sm-2 control-label">number of paragraphs</label>
-          <div class='col-sm-10'>
+          <label for="num_para" class="control-label">number of paragraphs</label>
+          <div class=''>
             <select name='num_para' class='form-control'>
               <option value='5'>5</option>
               <option value='4'>4</option>   
@@ -48,8 +46,11 @@
             </select>      
           </div>
         </div>
-      </fieldset>
-      <input class='btn btn-primary' type='submit' name='submit' value='submit' id='wanted_submit_btn' style='display:none'/>
+      </div>
+      <button class='btn btn-primary' type='submit' 
+        name='submit' value='submit' 
+                                id='wanted_submit_btn'
+                                style='display:none'>Get Content</button>
     </form>      
 
 </div>
