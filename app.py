@@ -202,12 +202,12 @@ def baconIpsumChoose(*args, **kwargs):
       },
     'iframe': { # works, the iframe is created but something on the
                 # Canvas side is borking up the iframe code
-        'url':     'https://icanhascheezburger.files.wordpress.com',
-        'title':'this is the title',
-        'alt': 'ceiling cat',
+        'url': request.args.get('iframe_url'),
+        'title':request.args.get('iframe_title'),
+        'return_type':'iframe',
         'embed_type':'iframe',
-        'width':600,
-        'height':250
+        'width':request.args.get('iframe_width'),
+        'height':request.args.get('iframe_height')
         }
     }
   
