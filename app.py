@@ -150,7 +150,7 @@ def baconIpsumFetch(lti,*args,**kwargs):
       paragraphs = paragraphs.replace('loripsum.net', 'canvaslms.com')
       resp['html'] = paragraphs
 
-    return render_template('baconIpsumFetch.html',dict(paragraphs=paragraphs))
+    return render_template('baconIpsumFetch.html',paragraphs=paragraphs)
     #if request.args.get('html','no')=='yes':
     #  return render_template('baconIpsumFetch.html',dict(paragraphs=paragraphs))
     #else:
