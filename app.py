@@ -147,7 +147,7 @@ def baconIpsumFetch(lti,*args,**kwargs):
       options = ['short','headers','decorate','link','ul','ul','dl','bq']
       lorem_url = "http://loripsum.net/api/%d/%s" % (num_para,'/'.join(options))
       paragraphs = requests.get(lorem_url).text
-      paragraphs = [paragraphs.replace('loripsum.net', 'canvaslms.com')]
+      paragraphs = paragraphs.replace('loripsum.net', 'canvaslms.com')
       resp['html'] = paragraphs
 
     #return render_template('baconIpsumFetch.html',paragraphs=paragraphs)
