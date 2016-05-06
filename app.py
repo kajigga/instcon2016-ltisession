@@ -72,11 +72,12 @@ def error(*args, **kwargs):
 @lti(error=error, request='initial')
 def first_lti_launch(lti, tool_id=None, *args, **kwargs):
   if tool_id == '0':
-    return redirect('/lti/mapit')
+    return redirect('mapit')
   elif tool_id == '1':
-    return redirect('/lti/yt_watch_for_points')
+    #return redirect('/lti/yt_watch_for_points')
+    return redirect(url_for('yt_watch_for_points'))
   elif tool_id == '2':
-    return redirect('/lti/baconipsum/choose')
+    return redirect(url_for('baconIpsumChoose'))
   else:
     return render_template('lti_profile.html')
 
@@ -303,6 +304,17 @@ def inject_app_info():
       'version':"0.0.1-step6",
       'project_name':'LTI Starter'
       }
+
+def _force_https():
+  # my local dev is set on debug, but on AWS it's not (obviously)
+  # I don't need HTTPS on local, change this to whatever condition you want.
+  if not app.debug: 
+      from flask import _request_ctx_stack
+      if _request_ctx_stack is not None:
+          reqctx = _request_ctx_stack.top
+          reqctx.url_adapter.url_scheme = 'https'
+
+app.before_request(_force_https)
 
 if __name__ == '__main__':
   ''' IP and PORT are two environmental variables configured in Cloud9. They
