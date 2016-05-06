@@ -231,6 +231,7 @@ def baconIpsumChoose(*args, **kwargs):
         red_args['iframe']['url'] = request.args.get('iframe_title')
         red_args['iframe']['height'] = height
         red_args['iframe']['width']  = width
+        print 'red_args[iframe]', red_args['iframe']
       elif wanted_type == 'link':
         pass
       elif wanted_type == 'oembed':
