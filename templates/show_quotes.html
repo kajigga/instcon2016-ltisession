@@ -1,6 +1,7 @@
 <h3>{{ lorem.label }}</h3>
 {% for p in paragraphs %}
 <blockquote>
+  <img src="http://loremflickr.com/320/240" />
   <p>{{ p.quote }}</p>
   <footer><cite title="{{ p.source }}">{{ p.source }}</cite></footer>
 </blockquote>
