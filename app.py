@@ -3,6 +3,7 @@ This file creates your application.
 """
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, make_response, jsonify
+import requests
 
 from pylti.flask import lti
 from pylti.common import LTI_PROPERTY_LIST, LTI_ROLES
