@@ -1,5 +1,5 @@
-<div class='baconipsum'>
-  {% for p in paragraphs %}
-  <p>{{ p }}</p>
-  {% endfor %}
+<div class='ipsum'>
+{% for p in paragraphs %}
+  <p>{{ p | safe }}</p>
+{% endfor %}
 </div>
