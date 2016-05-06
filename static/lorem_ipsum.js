@@ -26,6 +26,11 @@ $(document).ready(function(){
       $('#iframe_fields').show();
       $('#lorem_fields, #kitten_fields').hide();
     });
+    $('#random_btn').click(function(){
+      $('#wanted_type').val('iframe');
+      $('#random_fields').show();
+      $('#iframe_fields, lorem_fields, #kitten_fields').hide();
+    });
     $('#iframe_fields').change(function(){
       var height = $('#iframe_height').val() == '' ?  $('#iframe_preview').attr('height') : $('#iframe_height').val();
       var width = $('#iframe_width').val() == '' ?  $('#iframe_preview').attr('width') : $('#iframe_width').val();

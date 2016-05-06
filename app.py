@@ -105,13 +105,33 @@ def yt_watch_for_points_submit(lti, *args, **kwargs):
   print('response', response)
   return jsonify(status=response)
 
+
+lorem_types = [
+  {
+    'name':'regular',
+    'label':'Regular Lorem Ipsum text'
+  },
+  {
+    'name':'with_bacon',
+    'label':'Bacon Ipsum - tasty but not so good looking'
+  },
+  #{
+  #  'name':'show_titles',
+  #  'label':'Movie Quotes'
+  # },
+  {
+    'name':'random_text',
+    'label':'Random Text'
+   }
+]
+
 # Make sure you don't include the @lti decorator on this route. Canvas won't be
 # able to request the information otherwise.
 
 @app.route('/lti/baconipsum/fetch')
 def baconIpsumFetch(*args,**kwargs):
     num_para = int(request.args.get('num_para',5))
-    with_bacon = request.args.get('with_bacon','no').lower()
+    lorem_type = request.args.get('lorem_type','regular').lower()
     show = request.args.get('show','none').lower()
     resp = {
       'version': '1.0',
@@ -124,7 +144,7 @@ def baconIpsumFetch(*args,**kwargs):
     
 
     #print 'with_bacon', with_bacon
-    if with_bacon == 'on':
+    if lorem_type == 'with_bacon':
       # Now get the bacon ipsum
       bacon_url = "http://baconipsum.com/api/?type=meat-and-filler&paras=%d&start-with-lorem=0" % num_para 
 
@@ -138,13 +158,25 @@ def baconIpsumFetch(*args,**kwargs):
 
         paragraphs = ['',]
       resp['html'] = "<p>%s</p>" % "</p><p>".join(paragraphs)
-    elif show in ('arresteddevelopment','doctorwho','dexter','futurama','holygrail','simpsons','starwars'):
+    elif lorem_type == 'random_text':
+      lorem_url = 'http://randomtext.me/api/lorem/p-{}/5-15/'.format(num_para)
 
-      fillerama_url = "http://api.chrisvalleskey.com/fillerama/get.php?count=100&format=json&show=%s" % show
-      response = requests.get(fillerama_url).json()
-      paragraphs = [x['quote'] for x in response['db']]
-      resp['html'] = "<p>%s</p>" % "</p><p>".join(paragraphs)
-    else:
+      try:
+        paragraphs = requests.get(bacon_url).json()
+        # paragraphs = json_decode('%s' % bacon_response)
+      except Exception,err:
+        print 'err',err
+
+        paragraphs = ['']
+      resp['html'] = paragraphs['text_out']
+    #elif show in ('arresteddevelopment','doctorwho','dexter','futurama','holygrail','simpsons','starwars'):
+    #elif show in ('arresteddevelopment','doctorwho','dexter','futurama','holygrail','simpsons','starwars'):
+    #
+    #  fillerama_url = "http://api.chrisvalleskey.com/fillerama/get.php?count=100&format=json&show=%s" % show
+    #  response = requests.get(fillerama_url).json()
+    #  paragraphs = [x['quote'] for x in response['db']]
+    #  resp['html'] = "<p>%s</p>" % "</p><p>".join(paragraphs)
+    elif lorem_type == 'regular':
       # No bacon wanted, get regular Lorem Ipsum
       options = ['short','headers','decorate','link','ul','ul','dl','bq']
       lorem_url = "http://loripsum.net/api/%d/%s" % (num_para,'/'.join(options))
@@ -158,12 +190,13 @@ def baconIpsumFetch(*args,**kwargs):
     else:
       return jsonify(resp)
 
+
 @app.route('/lti/baconipsum/choose', methods=['GET', 'POST'])
 #@lti(error=error, request='session')
 def baconIpsumChoose(*args, **kwargs):
   if request.method == 'GET':
     # Prompt the user to select the size of the bacon 
-    return render_template('baconIpsumChoose.html')
+    return render_template('baconIpsumChoose.html', lorem_types=lorem_types)
 
   elif request.method=='POST':
     # Then do an api request to http://baconipsum.com/api/
@@ -175,7 +208,6 @@ def baconIpsumChoose(*args, **kwargs):
 
     # For some reason, we can't use https here... see
     # canvas-lms/app/controllers/external_content_controller.rb
-    with_bacon = request.form.get('with_bacon','no').lower()
     red_args = {'oembed' :{
         'url':     url_for('baconIpsumFetch', _external=True, _scheme='https', args=['lkjlkjlk']), 
         'endpoint':'',
