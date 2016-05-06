@@ -190,7 +190,7 @@ def baconIpsumFetch(*args,**kwargs):
       fillerama_url = "http://api.chrisvalleskey.com/fillerama/get.php?count=100&format=json&show=%s" % show
       response = requests.get(fillerama_url).json()
       paragraphs = [x['quote'] for x in response['db']]
-      resp['html'] = render_template('show_quotes.html', paragraphs=response['db'])
+      resp['html'] = render_template('show_quotes.html', paragraphs=response['db'], lorem=lorem_types[lorem_type])
     elif lorem_type == 'regular':
       # No bacon wanted, get regular Lorem Ipsum
       options = ['short','headers','decorate','link','ul','ul','dl','bq']
