@@ -105,9 +105,11 @@ def yt_watch_for_points_submit(lti, *args, **kwargs):
   print('response', response)
   return jsonify(status=response)
 
+# Make sure you don't include the @lti decorator on this route. Canvas won't be
+# able to request the information otherwise.
+
 @app.route('/lti/baconipsum/fetch')
-@lti(error=error, request='session')
-def baconIpsumFetch(lti,*args,**kwargs):
+def baconIpsumFetch(*args,**kwargs):
     num_para = int(request.args.get('num_para',5))
     with_bacon = request.args.get('with_bacon','no').lower()
     show = request.args.get('show','none').lower()
