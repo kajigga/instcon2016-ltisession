@@ -196,7 +196,7 @@ def baconIpsumFetch(*args,**kwargs):
     #elif show in ('arresteddevelopment','doctorwho','dexter','futurama','holygrail','simpsons','starwars'):
     elif '_quotes' in lorem_type:
       show = lorem_type.replace('_quotes', '')
-      fillerama_url = "http://api.chrisvalleskey.com/fillerama/get.php?count=100&format=json&show=%s" % show
+      fillerama_url = "http://api.chrisvalleskey.com/fillerama/get.php?count=10&format=json&show=%s" % show
       response = requests.get(fillerama_url).json()
       paragraphs = [x['quote'] for x in response['db']]
       resp['html'] = render_template('show_quotes.html', paragraphs=response['db'], lorem=lorem_types[lorem_type])
