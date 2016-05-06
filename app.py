@@ -225,10 +225,10 @@ def baconIpsumChoose(*args, **kwargs):
         red_args['img']['height'] = height
         red_args['img']['width']  = width
       elif wanted_type == 'iframe':
-        height = int(request.args.get('iframe_height',100))
-        width  = int(request.args.get('iframe_width',100))
-        red_args['iframe']['url'] = request.args.get('iframe_url','')
-        red_args['iframe']['url'] = request.args.get('iframe_title')
+        height = int(request.form.get('iframe_height',100))
+        width  = int(request.form.get('iframe_width',100))
+        red_args['iframe']['url'] = request.form.get('iframe_url','')
+        red_args['iframe']['url'] = request.form.get('iframe_title')
         red_args['iframe']['height'] = height
         red_args['iframe']['width']  = width
         print 'red_args[iframe]', red_args['iframe']
