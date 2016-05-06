@@ -150,11 +150,11 @@ def baconIpsumFetch(lti,*args,**kwargs):
       paragraphs = [paragraphs.replace('loripsum.net', 'canvaslms.com')]
       resp['html'] = paragraphs
 
-    return render_template('baconIpsumFetch.html',paragraphs=paragraphs)
-    #if request.args.get('html','no')=='yes':
-    #  return render_template('baconIpsumFetch.html',dict(paragraphs=paragraphs))
-    #else:
-    #  return HttpResponse(json.dumps(resp), content_type="application/json")
+    #return render_template('baconIpsumFetch.html',paragraphs=paragraphs)
+    if request.args.get('html','no')=='yes':
+      return render_template('baconIpsumFetch.html',dict(paragraphs=paragraphs))
+    else:
+      return jsonify(resp)
 
 @app.route('/lti/baconipsum/choose', methods=['GET', 'POST'])
 @lti(error=error, request='session')
