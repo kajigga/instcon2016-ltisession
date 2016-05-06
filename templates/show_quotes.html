@@ -1,0 +1,6 @@
+{% for p in paragraphs %}
+<blockquote>
+  <p>{{ p.quote }}</p>
+  <footer><cite title="{{ p.source }}">{{ p.source }}</cite></footer>
+</blockquote>
+{% endfor %}

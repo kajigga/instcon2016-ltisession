@@ -2,7 +2,7 @@
 This file creates your application.
 """
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, make_response, jsonify
+from flask import Flask, render_template, render_template_string, request, redirect, url_for, session, make_response, jsonify
 import requests
 
 from pylti.flask import lti
@@ -110,20 +110,34 @@ lorem_types = [
   {
     'name':'regular',
     'label':'Regular Lorem Ipsum text'
-  },
-  {
+  },{
     'name':'with_bacon',
     'label':'Bacon Ipsum - tasty but not so good looking'
-  },
-  #{
-  #  'name':'show_titles',
-  #  'label':'Movie Quotes'
-  # },
-  {
+  },{
     'name':'random_text',
     'label':'Random Text'
-   }
-]
+  },{
+    'name': 'arresteddevelopment_quotes',
+    'label':'Quotes from Arrested Development'
+  },{
+    'name':'doctorwho_quotes',
+    'label':'Quotes from Dr. Who'
+  },{
+    'name':'dexter_quotes',
+    'label':'Quotes from Dexter'
+  },{
+    'name':'futurama_quotes',
+    'label':'Quotes from Futurama'
+  },{
+    'name':'holygrail_quotes',
+    'label':'Quotes from Monty Python and the Holy Grail'
+  },{
+    'name':'simpsons_quotes',
+    'label':'Quotes from the Simpsons'
+  },{
+    'name':'starwars_quotes',
+    'label':'Quotes from Star Wars'
+  }]
 
 # Make sure you don't include the @lti decorator on this route. Canvas won't be
 # able to request the information otherwise.
@@ -171,11 +185,12 @@ def baconIpsumFetch(*args,**kwargs):
       resp['html'] = paragraphs['text_out']
     #elif show in ('arresteddevelopment','doctorwho','dexter','futurama','holygrail','simpsons','starwars'):
     #elif show in ('arresteddevelopment','doctorwho','dexter','futurama','holygrail','simpsons','starwars'):
-    #
-    #  fillerama_url = "http://api.chrisvalleskey.com/fillerama/get.php?count=100&format=json&show=%s" % show
-    #  response = requests.get(fillerama_url).json()
-    #  paragraphs = [x['quote'] for x in response['db']]
-    #  resp['html'] = "<p>%s</p>" % "</p><p>".join(paragraphs)
+    elif '_quotes' in lorem_type:
+      show = lorem_type.replace('_quotes', '')
+      fillerama_url = "http://api.chrisvalleskey.com/fillerama/get.php?count=100&format=json&show=%s" % show
+      response = requests.get(fillerama_url).json()
+      paragraphs = [x['quote'] for x in response['db']]
+      resp['html'] = render_template('show_quotes.html', paragraphs=response['db'])
     elif lorem_type == 'regular':
       # No bacon wanted, get regular Lorem Ipsum
       options = ['short','headers','decorate','link','ul','ul','dl','bq']
