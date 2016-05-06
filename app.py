@@ -256,7 +256,7 @@ def baconIpsumChoose(*args, **kwargs):
         'width':300,
         'height':250
       },
-    'dilbert': { # works
+    'random_dilbert': { # works
         # Other options: 
         # - http://placehold.it/
         # - http://www.webresourcesdepot.com/8-free-placeholder-image-services-for-instant-dummy-images/
@@ -284,7 +284,7 @@ def baconIpsumChoose(*args, **kwargs):
         red_args['img']['url'] = red_args['img']['url'] % (height,width)
         red_args['img']['height'] = height
         red_args['img']['width']  = width
-      elif wanted_type == 'dilbert':
+      elif wanted_type == 'random_dilbert':
         year = random.choice(["2011", "2012", "2013","2014", "2015"])
         month = random.choice(range(1, 13))
         day = random.choice(range(1, 29))
@@ -292,7 +292,7 @@ def baconIpsumChoose(*args, **kwargs):
         page_contents = urllib.urlopen(url_to_dilbert_page).read()
         image_url = re.search('<a href="/strips/comic/.*?/"><img onload=".*?" src="(.*?)" alt="The Official Dilbert Website featuring Scott Adams Dilbert strips, animations and more" border="0" /></a>', page_contents).group(1)
         image_url = "http://www.dilbert.com" + image_url
-        red_args['dilbert']['url'] = image_url
+        red_args['random_dilbert']['url'] = image_url
       elif wanted_type == 'iframe':
         height = request.form.get('iframe_height',100)
         width  = request.form.get('iframe_width',100)
