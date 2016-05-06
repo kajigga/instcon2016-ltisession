@@ -267,15 +267,23 @@ def baconIpsumChoose(*args, **kwargs):
 
     #redirect_url = success_url % urllib.urlencode(red_args['oembed'])
     wanted_type = request.form.get('wanted_type','oembed')
-    if wanted_type in ('img','link','iframe','oembed'):
+    if wanted_type in ('img','link','iframe','oembed','random_dilbert'):
       #redirect_url = success_url % urllib.urlencode(red_args['img'])
-      print 'wanted ', wanted_type
       if wanted_type == 'img':
         height = int(request.args.get('height',100))
         width  = int(request.args.get('width',100))
         red_args['img']['url'] = red_args['img']['url'] % (height,width)
         red_args['img']['height'] = height
         red_args['img']['width']  = width
+      elif wanted_type == 'dilbert':
+        year = random.choice(["2011", "2012", "2013","2014", "2015"])
+        month = random.choice(range(1, 13))
+        day = random.choice(range(1, 29))
+        url_to_dilbert_page = "http://www.dilbert.com/%s-%s-%s/" % (year, month, day)
+        page_contents = urllib.urlopen(url_to_dilbert_page).read()
+        image_url = re.search('<a href="/strips/comic/.*?/"><img onload=".*?" src="(.*?)" alt="The Official Dilbert Website featuring Scott Adams Dilbert strips, animations and more" border="0" /></a>', page_contents).group(1)
+        image_url = "http://www.dilbert.com" + image_url
+        red_args['img']['url'] = image_url
       elif wanted_type == 'iframe':
         height = request.form.get('iframe_height',100)
         width  = request.form.get('iframe_width',100)

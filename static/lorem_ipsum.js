@@ -21,6 +21,9 @@ $(document).ready(function(){
       $('#lorem_fields').show();
       $('#kitten_fields, #iframe_fields').hide();
     });
+    $('#random_dilbert_btn').click(function(){
+      $('#wanted_type').val('random_dilbert');
+    });
     $('#embed_iframe_btn').click(function(){
       $('#wanted_type').val('iframe');
       $('#iframe_fields').show();
