@@ -14,6 +14,10 @@ app.debug = True
 # set the secret key.  keep this really secret:
 app.secret_key = 'a0lkanvoiuas9d8faskdjaksjnvalisdfJ:{}{OIUzR98J/3Yx r~xhh!JMn]lwx/,?rt'
 
+# set the secret key.  keep this really secret:
+app.secret_key = 'a0lkanvoiuas9d8faskdjaksjnvalisdfJ:{}{OIUzR98J/3Yx r~xhh!JMn]lwx/,?rt'
+
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 # LTI Consumers
 consumers = {
@@ -71,6 +75,8 @@ def first_lti_launch(lti, tool_id=None, *args, **kwargs):
     return redirect('/lti/mapit')
   elif tool_id == '1':
     return redirect('/lti/yt_watch_for_points')
+  elif tool_id == '2':
+    return redirect('/lti/baconipsum/choose')
   else:
     return render_template('lti_profile.html')
 
@@ -151,7 +157,7 @@ def baconIpsumFetch(lti,*args,**kwargs):
 
 @app.route('/lti/baconipsum/choose', methods=['GET', 'POST'])
 @lti(error=error, request='session')
-def baconIpsumChoose(request):
+def baconIpsumChoose(lti, *args, **kwargs):
   if request.method == 'GET':
     # Prompt the user to select the size of the bacon 
     return render_template('baconIpsumChoose.html')
@@ -305,3 +311,4 @@ if __name__ == '__main__':
   hostname 0.0.0.0 and port 5000 are set as well.'''
 
   app.run(host=os.getenv('IP','0.0.0.0'),port=int(os.getenv('PORT',5000)))    
+

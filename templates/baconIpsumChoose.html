@@ -1,4 +1,4 @@
-{% extends 'ltiapp_layout.html'%}
+{% extends 'layout.html'%}
 {% block page_title %}Choose your Bacon{% endblock %}
 
 {% block main_content %}
@@ -6,11 +6,11 @@
     <p>What do you want?</p>
     <button type='button' id='kitten_btn'>Kitten Image</button>
     <button type='button' id='lorem_btn'>Lorem Ipsum</button>
-    <form action='{% url "baconipsum:bacon_choose" %}' method='POST'>
-        {% csrf_token %}
+    <form action='{{ url_for("baconIpsumChoose") }}' method='POST'>
+        
     </form>
-    <form action='{% url "baconipsum:bacon_choose" %}' method='POST'>
-      {% csrf_token %}
+    <form action='{{ url_for("baconIpsumChoose") }}' method='POST'>
+  
       <input type='hidden' name='wanted_type' id='wanted_type' value='img'/> 
       <fieldset id='kitten_fields' style='display:none'>
         <legend>Kitten Picture</legend>
