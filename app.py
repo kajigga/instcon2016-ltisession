@@ -234,7 +234,7 @@ def baconIpsumChoose(*args, **kwargs):
       elif wanted_type == 'oembed':
         show = request.form.get('show','none')
         url_for('baconIpsumFetch', _external=True, _scheme='https',args=['lkjlkjlk']) 
-        red_args['oembed']['endpoint'] = url_for('baconIpsumFetch', _external=True, _scheme='https',args=request.form)
+        red_args['oembed']['endpoint'] = url_for('baconIpsumFetch', _external=True, _scheme='https',**dict(request.form))
         red_args['oembed']['url'] = red_args['oembed']['endpoint'] #.replace('https','http')
 
       redirect_url = success_url +"?"+ urllib.urlencode(red_args[wanted_type])
