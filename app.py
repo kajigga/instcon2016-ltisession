@@ -202,12 +202,8 @@ def baconIpsumChoose(*args, **kwargs):
       },
     'iframe': { # works, the iframe is created but something on the
                 # Canvas side is borking up the iframe code
-        'url': request.args.get('iframe_url'),
-        'title':request.args.get('iframe_title'),
         'return_type':'iframe',
         'embed_type':'iframe',
-        'width':request.args.get('iframe_width'),
-        'height':request.args.get('iframe_height')
         }
     }
   
@@ -225,14 +221,13 @@ def baconIpsumChoose(*args, **kwargs):
         red_args['img']['height'] = height
         red_args['img']['width']  = width
       elif wanted_type == 'iframe':
-        height = int(request.form.get('iframe_height',100))
-        width  = int(request.form.get('iframe_width',100))
-        red_args['iframe']['url'] = request.form.get('iframe_url','')
-        red_args['iframe']['url'] = request.form.get('iframe_title')
+        height = request.form.get('iframe_height',100)
+        width  = request.form.get('iframe_width',100)
+        red_args['iframe']['url'] = request.form.get('iframe_url')
+        red_args['iframe']['title'] = request.form.get('iframe_title')
         red_args['iframe']['height'] = height
         red_args['iframe']['width']  = width
         print 'form args', request.form
-        print 'query args', request.args
         print 'red_args[iframe]', red_args['iframe']
       elif wanted_type == 'link':
         pass
