@@ -106,38 +106,47 @@ def yt_watch_for_points_submit(lti, *args, **kwargs):
   return jsonify(status=response)
 
 
-lorem_types = [
-  {
+lorem_types = {
+  'regular':{
     'name':'regular',
     'label':'Regular Lorem Ipsum text'
-  },{
+  },
+  'with_bacon':{
     'name':'with_bacon',
     'label':'Bacon Ipsum - tasty but not so good looking'
-  },{
+  },
+  'random_text':{
     'name':'random_text',
     'label':'Random Text'
-  },{
+  },
+  'arresteddevelopment_quotes': {
     'name': 'arresteddevelopment_quotes',
     'label':'Quotes from Arrested Development'
-  },{
+  },
+  'doctorwho_quotes':{
     'name':'doctorwho_quotes',
     'label':'Quotes from Dr. Who'
-  },{
+  },
+  'dexter_quotes':{
     'name':'dexter_quotes',
     'label':'Quotes from Dexter'
-  },{
+  },
+  'futurama_quotes':{
     'name':'futurama_quotes',
     'label':'Quotes from Futurama'
-  },{
+  },
+  'holygrail_quotes':{
     'name':'holygrail_quotes',
     'label':'Quotes from Monty Python and the Holy Grail'
-  },{
+  },
+  'simpsons_quotes':{
     'name':'simpsons_quotes',
     'label':'Quotes from the Simpsons'
-  },{
+  },
+  'starwars_quotes':{
     'name':'starwars_quotes',
     'label':'Quotes from Star Wars'
-  }]
+  }}
 
 # Make sure you don't include the @lti decorator on this route. Canvas won't be
 # able to request the information otherwise.
