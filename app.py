@@ -72,12 +72,12 @@ def error(*args, **kwargs):
 @lti(error=error, request='initial')
 def first_lti_launch(lti, tool_id=None, *args, **kwargs):
   if tool_id == '0':
-    return redirect('mapit')
+    return redirect(url_for('mapit', _scheme='https', _external=True))
   elif tool_id == '1':
     #return redirect('/lti/yt_watch_for_points')
-    return redirect(url_for('yt_watch_for_points'))
+    return redirect(url_for('yt_watch_for_points', _scheme='https', _external=True))
   elif tool_id == '2':
-    return redirect(url_for('baconIpsumChoose'))
+    return redirect(url_for('baconIpsumChoose', _scheme='https', _external=True))
   else:
     return render_template('lti_profile.html')
 
@@ -92,8 +92,7 @@ def mapit_launch(lti):
 #@lti(error=error, request='session', role='learner')
 #@lti(error=error, request='session', role='instructor')
 def yt_watch_for_points(lti, *args, **kwargs):
-  video_id = 'M7lc1UVf-VE'
-  return render_template('yt_watch_for_points.html', video_id=video_id)
+  return render_template('yt_watch_for_points.html')
 
 @app.route('/lti/yt_watch_for_points/finished', methods=['POST'])
 @lti(error=error, request='session')
