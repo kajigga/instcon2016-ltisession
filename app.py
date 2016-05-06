@@ -124,7 +124,7 @@ def baconIpsumFetch(*args,**kwargs):
     
 
     #print 'with_bacon', with_bacon
-    if with_bacon == 'yes':
+    if with_bacon == 'no':
       # Now get the bacon ipsum
       bacon_url = "http://baconipsum.com/api/?type=meat-and-filler&paras=%d&start-with-lorem=0" % num_para 
 
