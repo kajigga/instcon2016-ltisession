@@ -256,15 +256,6 @@ def baconIpsumChoose(*args, **kwargs):
         'width':300,
         'height':250
       },
-    'random_dilbert': { # works
-        # Other options: 
-        # - http://placehold.it/
-        # - http://www.webresourcesdepot.com/8-free-placeholder-image-services-for-instant-dummy-images/
-        'url':     'https://placekitten.com/g/%d/%d',
-        'title':'this is the title',
-        'alt': 'random kitten',
-        'embed_type':'image'
-      },
     'iframe': { # works, the iframe is created but something on the
                 # Canvas side is borking up the iframe code
         'return_type':'iframe',
@@ -276,7 +267,8 @@ def baconIpsumChoose(*args, **kwargs):
 
     #redirect_url = success_url % urllib.urlencode(red_args['oembed'])
     wanted_type = request.form.get('wanted_type','oembed')
-    if wanted_type in ('img','link','iframe','oembed','random_dilbert'):
+    print('wanted_type: ' + wanted_type)
+    if wanted_type in red_args.keys():
       #redirect_url = success_url % urllib.urlencode(red_args['img'])
       if wanted_type == 'img':
         height = int(request.args.get('height',100))
@@ -284,15 +276,6 @@ def baconIpsumChoose(*args, **kwargs):
         red_args['img']['url'] = red_args['img']['url'] % (height,width)
         red_args['img']['height'] = height
         red_args['img']['width']  = width
-      elif wanted_type == 'random_dilbert':
-        year = random.choice(["2011", "2012", "2013","2014", "2015"])
-        month = random.choice(range(1, 13))
-        day = random.choice(range(1, 29))
-        url_to_dilbert_page = "http://www.dilbert.com/%s-%s-%s/" % (year, month, day)
-        page_contents = urllib.urlopen(url_to_dilbert_page).read()
-        image_url = re.search('<a href="/strips/comic/.*?/"><img onload=".*?" src="(.*?)" alt="The Official Dilbert Website featuring Scott Adams Dilbert strips, animations and more" border="0" /></a>', page_contents).group(1)
-        image_url = "http://www.dilbert.com" + image_url
-        red_args['random_dilbert']['url'] = image_url
       elif wanted_type == 'iframe':
         height = request.form.get('iframe_height',100)
         width  = request.form.get('iframe_width',100)
@@ -357,8 +340,8 @@ tools = [{
     'url':'https://{}/lti/launch/{}'.format(SERVER_NAME, 2),
     'editor_button':{
         'icon_url':'https://dl.dropboxusercontent.com/u/1647772/lorem.png',
-        "selection_width":500,
-        "selection_height":300
+        "selection_width":550,
+        "selection_height":400
         }
   }
 ]
