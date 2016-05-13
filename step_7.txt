@@ -1,0 +1,4 @@
+
+In step 7 we will make an LTI app that will do:
+
+* Rich Text Button, Foreign Characters
