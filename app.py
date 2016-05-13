@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This file creates your application.
 """
@@ -93,13 +94,54 @@ def specialchars_fetch(*args,**kwargs):
 
     return jsonify(resp)
 
+special_chars = {
+  'fr': {
+      'label':'fr',
+      'name':u'Français',
+      'characters':[ 
+        {'char':u'À','win_alt_code':'0192'},
+        {'char':u'à', 'win_alt_code':'133'},
+        {'char':u'Â','win_alt_code':'0194'},
+        {'char':u'â','win_alt_code':'131'},
+        {'char':u'Ä','win_alt_code':'142'},
+        {'char':u'ä','win_alt_code':'132'},
+        {'char':u'Æ','win_alt_code':'146'},
+        {'char':u'æ','win_alt_code':'145'},
+        {'char':u'Ç','win_alt_code':'128'},
+        {'char':u'ç','win_alt_code':'135'},
+        {'char':u'È','win_alt_code':'0200'},
+        {'char':u'è','win_alt_code':'138'},
+        {'char':u'É','win_alt_code':'144'},
+        {'char':u'é','win_alt_code':'130'},
+        {'char':u'Ê','win_alt_code':'0202'},
+        {'char':u'ê','win_alt_code':'136'},
+        {'char':u'Ë','win_alt_code':'0203'},
+        {'char':u'ë','win_alt_code':'137'},
+        {'char':u'Î','win_alt_code':'0206'},
+        {'char':u'î','win_alt_code':'140'},
+        {'char':u'Ï','win_alt_code':'0207'},
+        {'char':u'ï','win_alt_code':'139'},
+        {'char':u'Ô','win_alt_code':'0212'},
+        {'char':u'ô','win_alt_code':'147'},
+        {'char':u'Œ','win_alt_code':'0140'},
+        {'char':u'œ','win_alt_code':'0156'},
+        {'char':u'Ù','win_alt_code':'0217'},
+        {'char':u'ù','win_alt_code':'151'},
+        {'char':u'Û','win_alt_code':'0219'},
+        {'char':u'û','win_alt_code':'150'},
+        {'char':u'Ü','win_alt_code':'154'},
+        {'char':u'ü','win_alt_code':'129'}
+
+        ]
+    }
+}
 
 @app.route('/lti/special_chars/choose', methods=['GET', 'POST'])
-#@lti(error=error, request='session')
+@lti(error=error, request='session')
 def special_chars_choose(*args, **kwargs):
   if request.method == 'GET':
     # Prompt the user to select the size of the bacon 
-    return render_template('special_chars_chooser.html')
+    return render_template('special_chars_chooser.html', special_chars=special_chars)
 
   elif request.method=='POST':
     # Then do an api request to http://baconipsum.com/api/
@@ -122,15 +164,12 @@ def special_chars_choose(*args, **kwargs):
   
     success_url = session.get('launch_presentation_return_url','')
 
-    #redirect_url = success_url % urllib.urlencode(red_args['oembed'])
-    wanted_type = 'oembed'
-    if wanted_type in red_args.keys():
-      #redirect_url = success_url % urllib.urlencode(red_args['img'])
-        url_for('specialchars_fetch', _external=True, _scheme='https',args=['lkjlkjlk']) 
-        red_args['oembed']['endpoint'] = url_for('specialchars_fetch', _external=True, _scheme='https',**dict(request.form))
-        red_args['oembed']['url'] = red_args['oembed']['endpoint'] #.replace('https','http')
+    red_args['oembed']['endpoint'] = url_for('specialchars_fetch', _external=True, _scheme='https',**dict(request.form))
+    red_args['oembed']['url'] = red_args['oembed']['endpoint'] #.replace('https','http')
 
-      redirect_url = success_url +"?char="+request.form.get('char','') 
+    redirect_url = '{}?{}'.format(success_url, urllib.urlencode(red_args['oembed']))
+
+    print 'redirect_url', redirect_url
     return redirect(redirect_url)
 
 

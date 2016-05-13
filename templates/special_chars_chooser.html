@@ -1,0 +1,53 @@
+{% extends 'layout.html'%}
+{% block page_title %}Choose your Bacon{% endblock %}
+
+{% block main_content %}
+<div class='col-sm-12'>
+    <form id='char_select' class='form-vertical' action='{{ url_for("special_chars_choose" ) }}' method='POST'>
+      <input type='hidden' name='lang' id='lang' value=''/> 
+      <input type='hidden' name='char' id='char' value=''/> 
+
+          {% for key, lang in special_chars.iteritems() %}
+
+          <h4>{{ lang.name }} <small>[{{ lang.label }}]</small></h4>
+            {% for char in lang.characters %}
+            <span class='special-character btn' data-char='{{ char.char }}' id='{{ key }}-{{ char.win_alt_code }}'>{{ char.char}}</span>
+            {% endfor %}
+          {% endfor %}
+        </div>
+    </form>      
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+  $('.special-character.btn').click(function(evt){
+    $('#lang').val($(this).data('lang'));
+    $('#char').val($(this).data('char'));
+    
+    $('#char_select').submit();
+    /*
+    $.post('{{ url_for("special_chars_choose") }}', { char:$(this).data('char')})
+      .then( function(_r){
+        console.log(_r); 
+      });
+    */
+  });
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style >
+  .special-character {
+    border: 1px solid black;
+    width: 25px;
+    padding: 2px;
+  }
+  .char-hightlight {
+  
+  }
+</style>
+{% endblock %}
