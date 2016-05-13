@@ -13,6 +13,7 @@
             {% for char in special_chars[key].characters %}
             <span class='special-character btn' 
               data-char='{{ char.char }}' 
+              data-toggle="tooltip" data-placement="top"
               id='{{ key }}-{{ char.win_alt_code }}'
               title='windows code: {{ char.win_alt_code }}'
               >{{ char.char}}</span>
@@ -27,6 +28,7 @@
 {% block extra_js %}
 <script>
 $(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip()
   $('.special-character.btn').click(function(evt){
     $('#lang').val($(this).data('lang'));
     $('#char').val($(this).data('char'));
@@ -46,9 +48,10 @@ $(document).ready(function(){
 {% block extra_css %}
 <style >
   .special-character {
-    border: 1px solid black;
-    width: 25px;
-    padding: 2px;
+    border: 1px solid gray;
+    width: 35px;
+    padding: 4px;
+    font-size: 1.6em;
   }
   .special-character:hover {
     background-color: #ADD8E6;
