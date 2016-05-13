@@ -258,8 +258,8 @@ tools = [{
     'url':'https://{}/lti/launch/{}'.format(SERVER_NAME, 2),
     'editor_button':{
         'icon_url':'https://dl.dropboxusercontent.com/u/1647772/lorem.png',
-        "selection_width":550,
-        "selection_height":400
+        "selection_width":450,
+        "selection_height":600
         }
   }
 ]
