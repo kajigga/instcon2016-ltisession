@@ -73,7 +73,7 @@ def error(*args, **kwargs):
 @app.route('/lti/launch/<tool_id>', methods=['POST'])
 @lti(error=error, request='initial')
 def first_lti_launch(lti, tool_id=None, *args, **kwargs):
-  return redirect(url_for('special_chars', _scheme='https', _external=True))
+  return redirect(url_for('special_chars_choose', _scheme='https', _external=True))
 
 
 
