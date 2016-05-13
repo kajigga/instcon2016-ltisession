@@ -98,6 +98,7 @@ special_chars = {
   'fr': {
       'label':'fr',
       'name':u'Français',
+      'english_name': 'French',
       'characters':[ 
         {'char':u'À','win_alt_code':'0192'},
         {'char':u'à', 'win_alt_code':'133'},
@@ -131,13 +132,80 @@ special_chars = {
         {'char':u'û','win_alt_code':'150'},
         {'char':u'Ü','win_alt_code':'154'},
         {'char':u'ü','win_alt_code':'129'}
-
-        ]
+      ]
+    },
+  'es': {
+      'label':'es',
+      'name':u'Español',
+      'english_name': 'Spanish',
+      'characters':[ 
+        {'char':u'Á', 'win_alt_code': '0193'},
+        {'char':u'á', 'win_alt_code': '160'},
+        {'char':u'É', 'win_alt_code': '144'},
+        {'char':u'é', 'win_alt_code': '130'},
+        {'char':u'Ê', 'win_alt_code': '0202'},
+        {'char':u'Í', 'win_alt_code': '0205'},
+        {'char':u'í', 'win_alt_code': '161'},
+        {'char':u'Ñ', 'win_alt_code': '165'},
+        {'char':u'ñ', 'win_alt_code': '164'},
+        {'char':u'Ó', 'win_alt_code': '0211'},
+        {'char':u'ó', 'win_alt_code': '162'},
+        {'char':u'Ú', 'win_alt_code': '0218'},
+        {'char':u'ú', 'win_alt_code': '163'},
+        {'char':u'Ü', 'win_alt_code': '154'},
+        {'char':u'ü', 'win_alt_code': '129'},
+        {'char':u'¿', 'win_alt_code': '168'},
+        {'char':u'¡', 'win_alt_code': '173'},
+      ]
+    },
+  'it': {
+      'label':'it',
+      'name':u'Italiano',
+      'english_name': 'Italian',
+      'characters':[ 
+        {'char': u'à', 'win_alt_code': '133'},
+        {'char': u'è', 'win_alt_code': '138'},
+        {'char': u'ì', 'win_alt_code': '141'},
+        {'char': u'ò', 'win_alt_code': '149'},
+        {'char': u'ù', 'win_alt_code': '151'},
+        {'char': u'À', 'win_alt_code': '0192'},
+        {'char': u'È', 'win_alt_code': '0200'},
+        {'char': u'Ì', 'win_alt_code': '0204'},
+        {'char': u'Ò', 'win_alt_code': '0210'},
+        {'char': u'Ù', 'win_alt_code': '0217'}
+      ]
+    },
+  'de': {
+      'label':'de',
+      'name':u'Deutsch',
+      'english_name': 'German',
+      'characters':[ 
+        {'char': u'Ä', 'win_alt_code': '142'},
+        {'char': u'ä', 'win_alt_code': '132'},
+        {'char': u'Å', 'win_alt_code': '143'},
+        {'char': u'å', 'win_alt_code': '134'},
+        {'char': u'Æ', 'win_alt_code': '146'},
+        {'char': u'æ', 'win_alt_code': '145'},
+        {'char': u'Ğ', 'win_alt_code': '0208'},
+        {'char': u'ğ', 'win_alt_code': '0240'},
+        {'char': u'Ë', 'win_alt_code': '0206'},
+        {'char': u'ë', 'win_alt_code': '037'},
+        {'char': u'Ö', 'win_alt_code': '153'},
+        {'char': u'ö', 'win_alt_code': '148'},
+        {'char': u'Ø', 'win_alt_code': '0216'},
+        {'char': u'ø', 'win_alt_code': '0248'},
+        {'char': u'Ş', 'win_alt_code': '0222'},
+        {'char': u'ş', 'win_alt_code': '0254'},
+        {'char': u'Ü', 'win_alt_code': '154'},
+        {'char': u'ü', 'win_alt_code': '129'},
+        {'char': u'ÿ', 'win_alt_code': '152'},
+        {'char': u'ß', 'win_alt_code': '225'}
+      ]
     }
 }
 
 @app.route('/lti/special_chars/choose', methods=['GET', 'POST'])
-@lti(error=error, request='session')
+#@lti(error=error, request='session')
 def special_chars_choose(*args, **kwargs):
   if request.method == 'GET':
     # Prompt the user to select the size of the bacon 

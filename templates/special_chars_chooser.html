@@ -7,11 +7,15 @@
       <input type='hidden' name='lang' id='lang' value=''/> 
       <input type='hidden' name='char' id='char' value=''/> 
 
-          {% for key, lang in special_chars.iteritems() %}
+          {% for key in special_chars|sort() %}
 
-          <h4>{{ lang.name }} <small>[{{ lang.label }}]</small></h4>
-            {% for char in lang.characters %}
-            <span class='special-character btn' data-char='{{ char.char }}' id='{{ key }}-{{ char.win_alt_code }}'>{{ char.char}}</span>
+          <h4>{{ special_chars[key].name }} <small>[{{ special_chars[key].label }} - {{ special_chars[key].english_name }}]</small></h4>
+            {% for char in special_chars[key].characters %}
+            <span class='special-character btn' 
+              data-char='{{ char.char }}' 
+              id='{{ key }}-{{ char.win_alt_code }}'
+              title='windows code: {{ char.win_alt_code }}'
+              >{{ char.char}}</span>
             {% endfor %}
           {% endfor %}
         </div>
@@ -46,8 +50,8 @@ $(document).ready(function(){
     width: 25px;
     padding: 2px;
   }
-  .char-hightlight {
-  
+  .special-character:hover {
+    background-color: #ADD8E6;
   }
 </style>
 {% endblock %}
