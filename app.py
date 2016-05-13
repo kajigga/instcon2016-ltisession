@@ -269,8 +269,7 @@ def lti_config(tool_id):
   tool_id = int(tool_id)
   config_xml = render_template('xml/config.xml', tool=tools[tool_id])
   response = make_response(config_xml)
-  response.headers["Content-Type"] = "application/xml"    
-
+  response.headers["Content-Type"] = "application/xml"
   return response
 
 # I like to make certain values available on any rendered template without
