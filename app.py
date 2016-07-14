@@ -7,11 +7,6 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = 'a-really-long-should-be-unique-random-string'
 
-#app.config['SERVER_NAME'] = '<change this>'
-# Make sure app uses https everywhere. This will become important when there
-# are actually LTI endpoints and configuration used.
-#app.config['PREFERRED_URL_SCHEME'] = 'https'
-
 @app.route('/')
 def index():
     # "index.html" is a file found in the "templates" folder. It is mostly regular
@@ -21,9 +16,7 @@ def index():
 
 @app.route('/hello_world')
 def hello_world():
-    name = 'World'
-    session['name'] = request.args.get('name')
-    return 'Hello {}!'.format(name)
+    return 'Hello World!'
 
 # I like to make certain values available on any rendered template without
 # explicitly naming them. While these values won't change very often, I would
