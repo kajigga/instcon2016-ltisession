@@ -20,7 +20,7 @@ consumers = {
 }
 
 #SERVER_NAME = 'inst-ic-proj.herokuapp.com'
-SERVER_NAME = '0.0.0.0:5000'
+SERVER_NAME = 'flasktestapp1-kajigga2.c9users.io'
 #app.config['SERVER_NAME'] = SERVER_NAME
 
 # Configure flask app with PYLTI config, specifically the consumers
@@ -41,6 +41,22 @@ LTI_PROPERTY_LIST.extend([
     'ext_content_return_url',
     'ext_content_file_extensions'
 ])
+
+# This is the Administrator role and all of the different variations
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Administrator' ] = [ 
+    'urn:lti:instrole:ims/lis/Administrator', 
+    'urn:lti:sysrole:ims/lis/SysAdmin'
+]
+
+# This is the Instructor role
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Instructor' ] = [ 'urn:lti:instrole:ims/lis/Instructor', ]
+
+# This is the student role
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Student' ] = [ 
+    'urn:lti:instrole:ims/lis/Student', 
+    'urn:lti:instrole:ims/lis/Learner'
+]
+
 
 #app.config['SERVER_NAME'] = 'localhost'
 # Make sure app uses https everywhere. This will become important when there
@@ -66,9 +82,9 @@ def error(*args, **kwargs):
 @lti(error=error, request='initial')
 def first_lti_launch(lti, tool_id=None, *args, **kwargs):
   if tool_id == '0':
-    return redirect('/lti/mapit')
+    return redirect(url_for('mapit_launch',_external=True,_scheme='https'))
   elif tool_id == '1':
-    return redirect('/lti/yt_watch_for_points')
+    return redirect(url_for('yt_watch_for_points',_external=True,_scheme='https'))
   else:
     return render_template('lti_profile.html')
 
@@ -80,11 +96,8 @@ def mapit_launch(lti):
 
 @app.route('/lti/yt_watch_for_points')
 @lti(error=error, request='session')
-#@lti(error=error, request='session', role='learner')
-#@lti(error=error, request='session', role='instructor')
 def yt_watch_for_points(lti, *args, **kwargs):
-  video_id = 'M7lc1UVf-VE'
-  return render_template('yt_watch_for_points.html', video_id=video_id)
+  return render_template('yt_watch_for_points.html')
 
 @app.route('/lti/yt_watch_for_points/finished', methods=['POST'])
 @lti(error=error, request='session')
@@ -108,7 +121,7 @@ tools = [{
   'description' : '''This is the step 4 LTI Tool, with differentiated
   functionality for students and teachers, course navigation, and module item
   navigation.''',
-  'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 0),
+  'url':'https://{}/lti/launch/{}'.format(SERVER_NAME, 0),
   'nav' : [
     {
       'type':'course_navigation',
@@ -126,7 +139,7 @@ tools = [{
   external tool, and select a youtube video. Students watch the video and get
   points when they finish the video.''',
 
-  'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 1),
+  'url':'https://{}/lti/launch/{}'.format(SERVER_NAME, 1),
   }]
 
 @app.route('/lti/config/<tool_id>')
@@ -146,7 +159,7 @@ def lti_config(tool_id):
 def inject_app_info():
   return {
       'version':"0.0.1-step5",
-      'project_name':'LTI Starter'
+      'project_name':'LTI Starter - Youtube Watcher'
       }
 
 if __name__ == '__main__':
@@ -156,3 +169,4 @@ if __name__ == '__main__':
   hostname 0.0.0.0 and port 5000 are set as well.'''
 
   app.run(host=os.getenv('IP','0.0.0.0'),port=int(os.getenv('PORT',5000)))    
+
