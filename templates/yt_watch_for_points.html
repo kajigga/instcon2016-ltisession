@@ -3,7 +3,7 @@
 {% block main_content %}
 <div class='row'>
   <div class='col-md-12'>
-    {% if 'Learner' in session['ext_roles'] %}
+    {% if 'Learner' in session['roles'] %}
     <div class="progress">
       <div id='prog_bar' class="progress-bar" role="progressbar" aria-valuenow="5"
       aria-valuemin="0" aria-valuemax="5" style="width:5%">
@@ -39,7 +39,7 @@
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
     
-    {% if 'Learner' in session['ext_roles'] %}
+    {% if 'Learner' in session['roles'] %}
     <p>You have watched <span id="you_have_watched">...</span>% of 
     this video. Your score is updated in the LMS every couple of seconds.
     </p>
@@ -58,7 +58,7 @@ var LTI_ENV = {
   custom_canvas_user_id: '{{ session.custom_canvas_user_id }}', 
   context_id: '{{session.context_id}}' ,
   resource_link_id: '{{session.resource_link_id}}',
-  {% if 'Instructor' in session['ext_roles'] %}
+  {% if 'Instructor' in session['roles'] %}
   is_instructor: true
   {% else %}
   is_instructor: false
@@ -68,7 +68,7 @@ var LTI_ENV = {
 <script src="/static/video_watcher.js"></script>
 <script>
 
-{% if 'Instructor' in session['ext_roles'] %}
+{% if 'Instructor' in session['roles'] %}
 $(document).ready(function(){
   $('#video_id').change(function(e){
     // change_video_preview

@@ -3,12 +3,12 @@
 {% block main_content %}
 <div class='row'>
   <div class='col-md-6'>
-    {% if 'Learner' in session['ext_roles'] %}
+    {% if 'Learner' in session['roles'] %}
       <p>You are a student, this page should load a map that was created by the
       instructor before the course was published.</p>
     {% endif %}
 
-    {% if 'Instructor' in session['ext_roles'] %}
+    {% if 'Instructor' in session['roles'] %}
     <p>You are an instructor.</p>
 
     <form id='instructor_controls'>
