@@ -45,10 +45,6 @@ LTI_PROPERTY_LIST.extend([
     'ext_content_file_extensions'
 ])
 
-#app.config['SERVER_NAME'] = 'localhost'
-# Make sure app uses https everywhere. This will become important when there
-# are actually LTI endpoints and configuration used.
-#app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 @app.route('/')
 def index():
