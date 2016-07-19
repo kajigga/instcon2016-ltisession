@@ -45,6 +45,21 @@ LTI_PROPERTY_LIST.extend([
     'ext_content_file_extensions'
 ])
 
+# This is the Administrator role and all of the different variations
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Administrator' ] = [ 
+    'urn:lti:instrole:ims/lis/Administrator', 
+    'urn:lti:sysrole:ims/lis/SysAdmin'
+]
+
+# This is the Instructor role
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Instructor' ] = [ 'urn:lti:instrole:ims/lis/Instructor', ]
+
+# This is the student role
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Student' ] = [ 
+    'urn:lti:instrole:ims/lis/Student', 
+    'urn:lti:instrole:ims/lis/Learner'
+]
+
 
 @app.route('/')
 def index():
