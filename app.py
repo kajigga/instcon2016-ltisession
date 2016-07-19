@@ -19,8 +19,8 @@ consumers = {
     "abc123": {"secret": "secretkey-for-abc123"}
 }
 
-#SERVER_NAME = 'inst-ic-proj.herokuapp.com'
-SERVER_NAME = '0.0.0.0:5000'
+SERVER_NAME = 'flasktestapp1-kajigga2.c9users.io'
+#SERVER_NAME = '0.0.0.0:5000'
 #app.config['SERVER_NAME'] = SERVER_NAME
 
 # Configure flask app with PYLTI config, specifically the consumers
