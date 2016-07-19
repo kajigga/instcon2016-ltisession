@@ -119,6 +119,17 @@ def inject_app_info():
       'project_name':'LTI Starter'
       }
 
+# Add force to https
+def _force_https():
+  # my local dev is set on debug, but on AWS it's not (obviously)
+  # I don't need HTTPS on local, change this to whatever condition you want.
+  if not app.debug: 
+      from flask import _request_ctx_stack
+      if _request_ctx_stack is not None:
+          reqctx = _request_ctx_stack.top
+          reqctx.url_adapter.url_scheme = 'https'
+app.before_request(_force_https)
+  
 if __name__ == '__main__':
   ''' IP and PORT are two environmental variables configured in Cloud9. They
   can change occasionally without warning so the application must be able to
