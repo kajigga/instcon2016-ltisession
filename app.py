@@ -6,9 +6,12 @@ from flask import Flask, render_template, request, redirect, url_for, session, m
 
 from pylti.flask import lti
 from pylti.common import LTI_PROPERTY_LIST, LTI_ROLES
+#from flask_sslify import SSLify
 
 app = Flask(__name__)
+#sslify = SSLify(app)
 app.debug = True
+
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'a0lkanvoiuas9d8faskdjaksjnvalisdfJ:{}{OIUzR98J/3Yx r~xhh!JMn]lwx/,?rt'
@@ -66,7 +69,7 @@ def error(*args, **kwargs):
 @lti(error=error, request='initial')
 def first_lti_launch(lti, tool_id=None, *args, **kwargs):
   if tool_id == '0':
-    return redirect('/lti/mapit')
+    return redirect(url_for('mapit_launch', _external=True, _scheme='https'))
   else:
     return render_template('lti_profile.html')
 
@@ -87,7 +90,7 @@ tools = [{
   'description' : '''This is the step 4 LTI Tool, with differentiated
   functionality for students and teachers, course navigation, and module item
   navigation.''',
-  'url':'http://{}/lti/launch/{}'.format(SERVER_NAME, 0),
+  'url':'https://{}/lti/launch/{}'.format(SERVER_NAME, 0),
   'nav' : [
     {
       'type':'course_navigation',
@@ -119,17 +122,6 @@ def inject_app_info():
       'project_name':'LTI Starter'
       }
 
-# Add force to https
-def _force_https():
-  # my local dev is set on debug, but on AWS it's not (obviously)
-  # I don't need HTTPS on local, change this to whatever condition you want.
-  if not app.debug: 
-      from flask import _request_ctx_stack
-      if _request_ctx_stack is not None:
-          reqctx = _request_ctx_stack.top
-          reqctx.url_adapter.url_scheme = 'https'
-app.before_request(_force_https)
-  
 if __name__ == '__main__':
   ''' IP and PORT are two environmental variables configured in Cloud9. They
   can change occasionally without warning so the application must be able to
@@ -137,3 +129,4 @@ if __name__ == '__main__':
   hostname 0.0.0.0 and port 5000 are set as well.'''
 
   app.run(host=os.getenv('IP','0.0.0.0'),port=int(os.getenv('PORT',5000)))    
+
