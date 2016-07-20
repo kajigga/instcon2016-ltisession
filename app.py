@@ -49,10 +49,21 @@ LTI_PROPERTY_LIST.extend([
     'ext_content_file_extensions'
 ])
 
-#app.config['SERVER_NAME'] = 'localhost'
-# Make sure app uses https everywhere. This will become important when there
-# are actually LTI endpoints and configuration used.
-#app.config['PREFERRED_URL_SCHEME'] = 'https'
+# This is the Administrator role and all of the different variations
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Administrator' ] = [ 
+    'urn:lti:instrole:ims/lis/Administrator', 
+    'urn:lti:sysrole:ims/lis/SysAdmin'
+]
+
+# This is the Instructor role
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Instructor' ] = [ 'urn:lti:instrole:ims/lis/Instructor', ]
+
+# This is the student role
+LTI_ROLES[ 'urn:lti:instrole:ims/lis/Student' ] = [ 
+    'urn:lti:instrole:ims/lis/Student', 
+    'urn:lti:instrole:ims/lis/Learner'
+]
+
 
 @app.route('/')
 def index():
